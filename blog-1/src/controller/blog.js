@@ -1,4 +1,5 @@
-const { exec } = require('../db/mysql')
+const { exec, escape } = require('../db/mysql')
+const xss = require('xss')
 
 /**
  * 获取博客列表
@@ -8,15 +9,17 @@ const { exec } = require('../db/mysql')
 const getList = (author, keyword) => {
     let sql =  `select * from blogs where 1=1 `
     if (author) {
-        sql += `and author='${author}' `
+        author = escape(author)
+        sql += `and author=${author} `
     }
 
     if (keyword) {
+        keyword = escape(keyword)
         sql += `and title like '%${keyword}%' `
     }
 
     sql += `order by createtime desc;`
-
+    console.log('sql:',sql)
     // 返回promise
     return exec(sql)
 }
@@ -26,7 +29,8 @@ const getList = (author, keyword) => {
  * @param {博客ID} id 
  */
 const getDetail = (id) => {
-    const sql = `select * from blogs where id='${id}'`
+    id = escape(id)
+    const sql = `select * from blogs where id=${id}`
     return exec(sql).then(rows => {
         return rows[0]
     })
@@ -39,9 +43,13 @@ const getDetail = (id) => {
 const newBlog = ({title, content, author} = {}) => {
     // blogData 是一个博客对象，包含 title content author属性
     const createTime = Date.now()
+    title = xss(escape(title))
+    console.log('title is ',title)
+    content = escape(content)
+    author = escape(author)
     const sql = `
         insert into blogs (title, content, createtime, author)
-        values ('${title}', '${content}', ${createTime}, '${author}');
+        values (${title}, ${content}, ${createTime}, ${author});
     `
     return exec(sql).then(insertData => {
         // console.log('insertData is ', insertData)
@@ -57,10 +65,13 @@ const newBlog = ({title, content, author} = {}) => {
  * @param {博客数据}} blogData 
  */
 const updateBlog = (id, {title, content} = {}) => {
+    id = escape(id)
+    title = escape(title)
+    content = escape(content)
     // id 就是要更新博客的 id
     // blogData 是一个博客对象，包含 title content 属性
     const sql = `
-        update blogs set title='${title}', content='${content}' where id=${id};
+        update blogs set title=${title}, content=${content} where id=${id};
     `
 
     return exec(sql).then(updateData => {
@@ -77,8 +88,10 @@ const updateBlog = (id, {title, content} = {}) => {
  * @param {博客ID} id 
  */
 const delBlog = (id, author) => {
+    id = escape(id)
+    author = escape(author)
     // id 就是要更新博客的 id
-    const sql = `delete from blogs where id='${id}' and author='${author}';`
+    const sql = `delete from blogs where id=${id} and author=${author};`
     return exec(sql).then(delData => {
         if (delData.affectedRows > 0) {
             return true
