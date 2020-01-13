@@ -1,9 +1,13 @@
 # nodeBlog
 
-# nginx 
-## ng配置文件目录： /usr/local/etc/nginx/nginx.conf
-## 测试配置文件格式是否正确 nginx -t
-## 启动 nginx
-## 重启 nginx -s reload
-## 停止 nginx -s stop
+## 配置启动ng， 配置信息参考nginx.conf文件
+
+## 启动前端页面
+> 安装http-server 
+> 进入http目录启动server http-server -p 8001
+
+## 启动server端
+> 进入server端目录
+> npm i
+> npm run dev
 

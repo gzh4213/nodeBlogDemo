@@ -44,3 +44,14 @@ module.exports = {
     get
 }
 
+
+/**
+ * 安装： brew install redis
+ * 启动： redis-server
+ * 命令行页面： redis-cli
+ * 所有key: keys *
+ * 设置key: set [key] [value]
+ * 获取key: get [key]
+ * 删除key: del [key]
+ */
+
