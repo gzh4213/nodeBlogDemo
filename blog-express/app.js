@@ -1,6 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+var fs = require('fs');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session')
@@ -18,7 +19,20 @@ var app = express();
 // app.set('view engine', 'jade');
 
 // 接入日志
-app.use(logger('dev'));
+const ENV = process.env.NODE_ENV
+if (ENV !== 'production') {
+  // 开发环境 | 测试环境
+  app.use(logger('dev'));
+} else {
+  // 线上环境: 把日志写入到日志文件中
+  const logFileName = path.join(__dirname, 'logs', 'access.log')
+  const writeStream = fs.createWriteStream(logFileName, {
+    flags: 'a'
+  })
+  app.use(logger('combined', {
+    stream: writeStream
+  }));
+}
 
 // 解析post请求数据，req.body中取值
 app.use(express.json());

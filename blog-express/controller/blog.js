@@ -19,7 +19,7 @@ const getList = (author, keyword) => {
     }
 
     sql += `order by createtime desc;`
-    console.log('sql:',sql)
+    // console.log('sql:',sql)
     // 返回promise
     return exec(sql)
 }
