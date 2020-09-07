@@ -1,7 +1,7 @@
 {
   "apps": {
     "name" : "blog-koa",
-    "script": "bin/www.js",
+    "script": "bin/www",
     "watch": false,
     "ignore_watch": [
       "node_modules",

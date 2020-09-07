@@ -24,17 +24,17 @@ if (env === 'dev') {
 if (env === 'production') {
     // mysql
     MYSQL_CONF = {
-        host: 'localhost',
+        host: '39.104.170.179',
         user: 'root',
-        password: 'Guo4213!',
+        password: 'Guozhen4213!',
         port:'3306',
-        database: 'myblog'
+        database: 'blog_gzh4213_com'
     }
 
     // redis
     REDIS_CONF = {
         port: 6379,
-        host: '127.0.0.1'
+        host: '39.104.170.179'
     }
 }
 
